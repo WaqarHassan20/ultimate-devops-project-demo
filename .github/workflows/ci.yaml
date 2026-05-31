@@ -57,8 +57,7 @@ jobs:
 
       - name: Run golangci-lint
         run: |
-          export PATH=$PATH:$(go env GOPATH)/bin
-          golangci-lint run ./src/product-catalog/...
+          golangci-lint run src/product-catalog/...
 
   docker:
     name: Build & Push Docker Image
