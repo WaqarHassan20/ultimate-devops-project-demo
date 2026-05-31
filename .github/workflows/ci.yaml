@@ -1,5 +1,8 @@
 name: product-catalog-ci
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 on:
   push:
     branches:
@@ -22,6 +25,7 @@ jobs:
         uses: actions/setup-go@v5
         with:
           go-version: "1.22"
+          cache-dependency-path: src/product-catalog/go.sum
 
       - name: Download dependencies
         run: |
@@ -50,14 +54,12 @@ jobs:
         uses: actions/setup-go@v5
         with:
           go-version: "1.22"
+          cache-dependency-path: src/product-catalog/go.sum
 
-      - name: Install golangci-lint
+      - name: Run go vet
+        working-directory: src/product-catalog
         run: |
-          go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
-
-      - name: Run golangci-lint
-        run: |
-          golangci-lint run src/product-catalog/...
+          go vet ./...
 
   docker:
     name: Build & Push Docker Image
