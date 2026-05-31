@@ -3,6 +3,9 @@ name: product-catalog-ci
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
+permissions:
+  contents: write
+
 on:
   push:
     branches:
@@ -95,6 +98,7 @@ jobs:
   update-k8s:
     name: Update Kubernetes Manifest
     runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
 
     needs:
       - docker
@@ -103,7 +107,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          token: ${{ secrets.TOKEN1 }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Update deployment image tag
         run: |
